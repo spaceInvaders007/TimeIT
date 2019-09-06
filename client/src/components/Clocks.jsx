@@ -8,12 +8,39 @@ class Clocks extends React.Component {
     super(props);
     this.state = {
       fieldCount: 0,
-      timers: []
+      timers: [],
+      savedTimers: []
     };
     this.addHandler = this.addHandler.bind(this);
     this.removeHandler = this.removeHandler.bind(this);
   }
+  componentDidMount() {
+   this.callApi()
+     .then(res => this.setState({ savedTimers: res.express }))
+      .catch(err => console.log(err));
+  }
 
+  callApi = async () => {
+    const response = await fetch("/timers");
+    const body = await response.json();
+    console.log(body)
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  };
+
+  // handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const response = await fetch("/api/world", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({ post: this.state.post })
+  //   });
+  //   const body = await response.text();
+
+  //   this.setState({ responseToPost: body });
+  // };
   addHandler(event) {
     event.preventDefault();
     this.setState({

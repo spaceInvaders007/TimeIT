@@ -9,6 +9,7 @@ class Clock extends React.Component {
     timers: this.props.timers,
     timerName: this.props.timers[this.props.timers.length - 1].timer
   };
+  
   handleClick = () => {
     this.setState(state => {
       if (state.status) {
@@ -53,7 +54,7 @@ class Clock extends React.Component {
           <Minutes>{`${minutes} :`}</Minutes>
           <Seconds>{`${seconds}`}</Seconds>
           <button onClick={this.handleClick}>
-            {status ? "Stop" : "Start"}
+            {status ? "Pause" : "Start"}
           </button>
           <button onClick={this.handleReset}>Reset</button>
           <button onClick={this.handleRemove.bind(this)}>Remove</button>
