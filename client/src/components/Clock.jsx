@@ -7,18 +7,64 @@ class Clock extends React.Component {
     runningTime: 0,
     display: "flex",
     timers: this.props.timers,
-    timerName: this.props.timers[this.props.timers.length - 1].timer
+    timerName: this.props.timers[this.props.timers.length - 1].timer,
+    seconds: 0,
+    minutes: 0,
+    hours: 0
   };
-  
+
+  handleSave = async e => {
+    e.preventDefault();
+    const response = await fetch("/timers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: this.state.timerName,
+        hours: ("0" + this.state.hours).slice(-2),
+        minutes: ("0" + this.state.minutes).slice(-2),
+        seconds: ("0" + this.state.seconds).slice(-2)
+      })
+    });
+    const body = await response.text();
+
+    this.setState({ responseToPost: body });
+  };
+
+  // handleClick = () => {
+  //   this.setState(state => {
+  //     if (state.status) {
+  //       clearInterval(this.timer);
+  //     } else {
+  //       const startTime = Date.now() - this.state.runningTime;
+  //       this.timer = setInterval(() => {
+  //         this.setState({ runningTime: Date.now() - startTime });
+  //       });
+  //     }
+  //     return { status: !state.status };
+  //   });
+  // };
   handleClick = () => {
     this.setState(state => {
       if (state.status) {
         clearInterval(this.timer);
       } else {
-        const startTime = Date.now() - this.state.runningTime;
         this.timer = setInterval(() => {
-          this.setState({ runningTime: Date.now() - startTime });
-        });
+          this.setState({ seconds: this.state.seconds + 1 });
+          if (this.state.seconds === 60) {
+            this.setState({
+              seconds: 0,
+              minutes: this.state.minutes + 1
+            });
+          }
+          if (this.state.minutes === 60) {
+            this.setState({
+              minutes: 0,
+              hours: this.state.hours + 1
+            });
+          }
+        }, 1000);
       }
       return { status: !state.status };
     });
@@ -39,13 +85,12 @@ class Clock extends React.Component {
     clearInterval(this.timer);
   }
   render() {
-    const { timerName } = this.state;
-
-    const { status, runningTime } = this.state;
-    let centiseconds = ("0" + (Math.floor(runningTime / 10) % 100)).slice(-2);
-    let seconds = ("0" + (Math.floor(runningTime / 1000) % 60)).slice(-2);
-    let minutes = ("0" + (Math.floor(runningTime / 60000) % 60)).slice(-2);
-    let hours = ("0" + Math.floor(runningTime / 3600000)).slice(-2);
+    const { status, runningTime, timerName } = this.state;
+    // let centiseconds = ("0" + (Math.floor(runningTime / 10) % 100)).slice(-2);
+    // let seconds = ("0" + (Math.floor(runningTime / 1000) % 60)).slice(-2);
+    let seconds = ("0" + `${this.state.seconds}`).slice(-2);
+    let minutes = ("0" + `${this.state.minutes}`).slice(-2);
+    let hours = ("0" + `${this.state.hours}`).slice(-2);
     return (
       <div>
         <StopWatch style={{ display: this.state.display }}>
@@ -53,11 +98,13 @@ class Clock extends React.Component {
           <Hours>{`${hours} :`}</Hours>
           <Minutes>{`${minutes} :`}</Minutes>
           <Seconds>{`${seconds}`}</Seconds>
+
           <button onClick={this.handleClick}>
             {status ? "Pause" : "Start"}
           </button>
           <button onClick={this.handleReset}>Reset</button>
           <button onClick={this.handleRemove.bind(this)}>Remove</button>
+          <button onClick={this.handleSave.bind(this)}>Save</button>
         </StopWatch>
       </div>
     );
