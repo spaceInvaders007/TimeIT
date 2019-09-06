@@ -6,7 +6,8 @@ class Clock extends React.Component {
     status: false,
     runningTime: 0,
     display: "flex",
-    timerName: this.props.timerName
+    timers: this.props.timers,
+    timerName: this.props.timers[this.props.timers.length - 1].timer
   };
   handleClick = () => {
     this.setState(state => {
@@ -37,7 +38,8 @@ class Clock extends React.Component {
     clearInterval(this.timer);
   }
   render() {
-    const { timerName } = this.props;
+    const { timerName } = this.state;
+
     const { status, runningTime } = this.state;
     let centiseconds = ("0" + (Math.floor(runningTime / 10) % 100)).slice(-2);
     let seconds = ("0" + (Math.floor(runningTime / 1000) % 60)).slice(-2);

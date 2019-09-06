@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Clock from "./Clock.jsx";
+import AddClock from "./AddClock.jsx";
 
 class Clocks extends React.Component {
   constructor(props) {
@@ -30,30 +31,25 @@ class Clocks extends React.Component {
       timers: this.state.timers.concat({ timer })
     });
   }
-  handleChange(e) {
-    this.setState({ timerName: e.target.value });
-  }
+  // handleChange(e) {
+  //   this.setState({ timerName: e.target.value });
+  // }
 
   render() {
     var childs = [];
     for (var i = 0; i < this.state.fieldCount; i++) {
-      childs.push(<Clock timerName={this.state.timerName} />);
+      childs.push(<Clock timers={this.state.timers} key={i} />);
     }
     return (
       <div className="navigator">
         {childs}
-        <form onSubmit={this.addHandler}>
+        {/* <form onSubmit={this.add}>
           <input onChange={this.handleChange.bind(this)} />
           <input type="submit" value="Add a Timer" />
         </form>
 
-        <button onClick={this.removeHandler}>Remove</button>
-        {/* <a>
-          Add Clock
-        </a>
-        <ClockWrapper>
-          <Clock />
-        </ClockWrapper> */}
+        <button onClick={this.removeHandler}>Remove</button> */}
+        <AddClock add={this.add.bind(this)} addHandler={this.addHandler} />
       </div>
     );
   }
