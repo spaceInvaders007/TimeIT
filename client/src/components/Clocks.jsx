@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Clock from "./Clock.jsx";
 import AddClock from "./AddClock.jsx";
 import RetrieveClock from "./RetrieveClock.jsx";
-
+import SavedTimers from "./SavedTimers.jsx";
 
 class Clocks extends React.Component {
   constructor(props) {
@@ -11,7 +11,8 @@ class Clocks extends React.Component {
     this.state = {
       fieldCount: 0,
       timers: [],
-      savedTimers: []
+      savedTimers: [],
+      retrievedTimers: []
     };
     this.addHandler = this.addHandler.bind(this);
     this.removeHandler = this.removeHandler.bind(this);
@@ -26,6 +27,7 @@ class Clocks extends React.Component {
       console.error("Encountered error fetching timers", err);
     }
   }
+
   // componentDidMount() {
   //  this.callApi()
   //    .then(res => this.setState({ savedTimers: res.express }))
@@ -70,6 +72,9 @@ class Clocks extends React.Component {
       timers: this.state.timers.concat({ timer })
     });
   }
+  handleSavedTimersClick() {
+    alert("this shit has been clicked");
+  }
   // handleChange(e) {
   //   this.setState({ timerName: e.target.value });
   // }
@@ -88,19 +93,31 @@ class Clocks extends React.Component {
         </form>
 
         <button onClick={this.removeHandler}>Remove</button> */}
+        {/* <SavedTimers  savedTimers={this.state.savedTimers}/> */}
+
         <div className="App-intro">
+          <ul>
+            {this.state.savedTimers.map(timer => (
+              <SavedTimers
+                timer={timer}
+                handleSavedTimersClick={this.handleSavedTimersClick.bind(this)}
+              />
+            ))}
+          </ul>
+        </div>
+
+        {/* <div className="App-intro">
           <ul>
             {this.state.savedTimers.map(timer => (
               <li key={timer.id} className={`retrievedTimer`}>{timer.title}</li>
             ))}
           </ul>
-        </div>
+        </div> */}
         <AddClock add={this.add.bind(this)} addHandler={this.addHandler} />
-        <RetrieveClock />
+        <RetrieveClock retrievedTimers={this.state.retrievedTimers} />
       </div>
     );
   }
 }
 
 export default Clocks;
-
