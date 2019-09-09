@@ -1,20 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-class Clock extends React.Component {
-  state = {
-    status: false,
-    runningTime: 0,
-    display: "flex",
-    timers: this.props.timers,
-    timerName: this.props.timers[this.props.timers.length - 1].timer,
-    seconds: 0,
-    minutes: 0,
-    hours: 0,
-    savedTimers: this.props.savedTimers
-  };
+class RetrievedClock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      status: false,
+      retrievedTimers: this.props.retrievedTimers,
+      title: this.props.retrievedTimers[this.props.retrievedTimers.length -1].title,
+      hours: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].hours),
+      minutes: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].minutes),
+      seconds: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].seconds)
+    };
+    //this.retrieveTimer = this.retrieveTimer.bind(this);
+  }
 
-  handleSave = async e => {
+  handleUpdate = async e => {
     e.preventDefault();
     const response = await fetch("/timers", {
       method: "POST",
@@ -33,24 +34,13 @@ class Clock extends React.Component {
     // console.log(body);
   };
 
-  // handleClick = () => {
-  //   this.setState(state => {
-  //     if (state.status) {
-  //       clearInterval(this.timer);
-  //     } else {
-  //       const startTime = Date.now() - this.state.runningTime;
-  //       this.timer = setInterval(() => {
-  //         this.setState({ runningTime: Date.now() - startTime });
-  //       });
-  //     }
-  //     return { status: !state.status };
-  //   });
-  // };
+
   handleClick = () => {
     this.setState(state => {
       if (state.status) {
         clearInterval(this.timer);
       } else {
+        this.setState({ seconds: this.state.seconds + 1 });
         this.timer = setInterval(() => {
           this.setState({ seconds: this.state.seconds + 1 });
           if (this.state.seconds === 60) {
@@ -70,54 +60,47 @@ class Clock extends React.Component {
       return { status: !state.status };
     });
   };
-  handleReset = () => {
-    clearInterval(this.timer); // new
-    this.setState({ runningTime: 0, status: false });
-  };
   handleRemove = () => {
     this.setState({
       display: "none"
     });
   };
-  handleChange(e) {
-    this.setState({ timerName: e.target.value });
-  }
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
+  //this functions works perfectly for retrieving one timer by id
+  // async retrieveTimer() {
+  //   try {
+  //     await fetch("/timers/:id");
+  //     let response = await fetch("/timers/:id");
+  //     console.log(response);
+  //   } catch (err) {
+  //     console.lerror("Couldn't fetch one timer");
+  //   }
+  // }
+
   render() {
-    const { status, timerName } = this.state;
-    // let centiseconds = ("0" + (Math.floor(runningTime / 10) % 100)).slice(-2);
-    // let seconds = ("0" + (Math.floor(runningTime / 1000) % 60)).slice(-2);
-    let seconds = ("0" + `${this.state.seconds}`).slice(-2);
-    let minutes = ("0" + `${this.state.minutes}`).slice(-2);
-    let hours = ("0" + `${this.state.hours}`).slice(-2);
+    const {title, hours, minutes, seconds} = this.state;
+    const { status } = this.state;
     return (
       <div>
-        <StopWatch style={{ display: this.state.display }}>
-          <TimerName>{`${timerName}`}</TimerName>
+      <StopWatch style={{ display: this.state.display}}>
+      <TimerName>{`${title}`}</TimerName>
           <Hours>{`${hours} :`}</Hours>
           <Minutes>{`${minutes} :`}</Minutes>
           <Seconds>{`${seconds}`}</Seconds>
-
-          <button onClick={this.handleClick}>
+    hello this is retrieveClocks
+   <button onClick={this.handleClick}>
             {status ? "Pause" : "Start"}
           </button>
           <button onClick={this.handleReset}>Reset</button>
           <button onClick={this.handleRemove.bind(this)}>Remove</button>
-          <button onClick={this.handleSave.bind(this)}>Save</button>
-        </StopWatch>
-      </div>
-    );
+          <button onClick={this.handleUpdate.bind(this)}>Save</button>
+    </StopWatch>
+    </div>
+       
+    )
   }
 }
 
-export default Clock;
-
-const StopWatch = styled.div`
-  display: flex;
-  justify-content: center;
-`;
+export default RetrievedClock;
 
 const Hours = styled.div`
   width: 30px;
@@ -132,3 +115,5 @@ const Seconds = styled.div`
 `;
 
 const TimerName = styled.div``;
+
+const StopWatch = styled.div``;
