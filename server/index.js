@@ -71,3 +71,13 @@ app.delete("/timers/:id", async (req, res) => {
     }
   });
 });
+
+app.put("timers/:id", async (req, res) => {
+  db.updateOne(req.params.id, (err, timer) => {
+    if (timer) {
+      res.status(200).json(timer);
+    } else {
+      res.sendStatus(404);
+    }
+  })
+})

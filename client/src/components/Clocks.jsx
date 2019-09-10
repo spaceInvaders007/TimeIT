@@ -17,6 +17,7 @@ class Clocks extends React.Component {
     this.addHandler = this.addHandler.bind(this);
     this.removeHandler = this.removeHandler.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.removeRetrievedClock = this.removeRetrievedClock.bind(this);
   }
 
   async componentDidMount() {
@@ -70,7 +71,18 @@ class Clocks extends React.Component {
   removeHandler(event) {
     this.setState({
       fieldCount: this.state.fieldCount - 1
-    });
+    }); 
+  }
+
+  removeRetrievedClock (value) {
+    console.log('it reaches removeRetrievedClock')
+  //  console.log(title)
+    var array = [...this.state.retrievedTimers]; // make a separate copy of the array
+ let index = array.map(function(e) { return e.title; }).indexOf(value);
+  if (index !== -1) {
+    array.splice(index, 1);
+    this.setState({retrievedTimers: array});
+  }
   }
 
   add(timer) {
@@ -85,10 +97,17 @@ class Clocks extends React.Component {
     // this.setState({
     //   retrievedTimers: this.state.retrievedTimers.concat({ retrievedTimer })
     // });
+    this.handleCheck(retrievedTimer) == false ?
     this.setState({
       retrievedTimers: [...this.state.retrievedTimers, retrievedTimer ]
-    });
+    })
+    : console.log('exists')
+
   }
+
+  handleCheck(val) {
+    return this.state.retrievedTimers.some(item => val.title === item.title);
+}
 
   render() {
     var childs = [];
@@ -107,6 +126,7 @@ class Clocks extends React.Component {
         <RetrievedClock 
           key={i}
           retrievedTimers={this.state.retrievedTimers}
+          removeRetrievedClock={this.removeRetrievedClock}
         />
       );}
 

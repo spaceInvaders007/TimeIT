@@ -40,6 +40,17 @@ const readOne = function(id, cb) {
   });
 };
 
+const updateOne = function(id, cb) {
+  let sql = "UPDATE * FROM timers WHERE id = ?";
+  connection.query(sql, [id], (error, result) => {
+    if (error) {
+      cb(console.error(error.message));
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 const insertOne = function(timer, cb) {
   connection.query("INSERT IGNORE INTO timers SET ?", timer, cb);
 };
@@ -60,5 +71,6 @@ module.exports = {
   selectAll,
   insertOne,
   readOne,
-  deleteOne
+  deleteOne,
+  updateOne
 };

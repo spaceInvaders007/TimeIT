@@ -18,7 +18,7 @@ class RetrievedClock extends React.Component {
   handleUpdate = async e => {
     e.preventDefault();
     const response = await fetch("/timers", {
-      method: "POST",
+      method: "UPDATE",
       headers: {
         "Content-Type": "application/json"
       },
@@ -64,6 +64,7 @@ class RetrievedClock extends React.Component {
     this.setState({
       display: "none"
     });
+    this.props.removeRetrievedClock(this.state.title)
   };
   //this functions works perfectly for retrieving one timer by id
   // async retrieveTimer() {
@@ -80,13 +81,12 @@ class RetrievedClock extends React.Component {
     const {title, hours, minutes, seconds} = this.state;
     const { status } = this.state;
     return (
-      <div>
+      <div className="retrieved-clock">
       <StopWatch style={{ display: this.state.display}}>
       <TimerName>{`${title}`}</TimerName>
           <Hours>{`${hours} :`}</Hours>
           <Minutes>{`${minutes} :`}</Minutes>
           <Seconds>{`${seconds}`}</Seconds>
-    hello this is retrieveClocks
    <button onClick={this.handleClick}>
             {status ? "Pause" : "Start"}
           </button>
@@ -116,4 +116,7 @@ const Seconds = styled.div`
 
 const TimerName = styled.div``;
 
-const StopWatch = styled.div``;
+const StopWatch = styled.div`
+ display: flex;
+
+`;

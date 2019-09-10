@@ -37,3 +37,8 @@
   margin: 10px;
   cursor: pointer;
 }
+
+.retrieved-clock {
+    display: flex;
+    justify-content: center;
+}
