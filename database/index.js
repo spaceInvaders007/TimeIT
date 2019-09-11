@@ -40,9 +40,14 @@ const readOne = function(id, cb) {
   });
 };
 
-const updateOne = function(id, cb) {
-  let sql = "UPDATE * FROM timers WHERE id = ?";
-  connection.query(sql, [id], (error, result) => {
+const updateOne = function(timer, cb) {
+  var { hours, minutes, seconds, id } = timer;
+  console.log(timer, "this is database timer");
+  console.log(hours, "this is hours ");
+  var params = [hours, minutes, seconds, id];
+  let sql =
+    "UPDATE timers SET hours = ?, minutes = ?, seconds = ?  WHERE id = ?";
+  connection.query(sql, params, (error, result) => {
     if (error) {
       cb(console.error(error.message));
     } else {

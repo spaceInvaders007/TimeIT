@@ -1,3 +1,14 @@
+* {
+  box-sizing: border-box;
+  font-family: "Fugaz One", cursive;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Fugaz One", cursive;
+  src: url("https://fonts.googleapis.com/css?family=Fugaz+One&display=swap");
+}
+
 .App {
   text-align: center;
 }
@@ -23,22 +34,90 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+/* @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
-.retrievedTimer {
-  color: red;
+.retrievedTimer,
+.delete-button {
   margin: 10px;
   cursor: pointer;
+  font-size: 18px;
+  background: white;
+  border: 3px solid #32b2cc;
+  border-radius: 50%;
+  padding: 11px;
+}
+
+.retrievedTimer:hover,
+.delete-button:hover {
+  background-color: #bfe7e7;
 }
 
 .retrieved-clock {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+}
+
+/* .gr__localhost {
+  background-color: #b2cc32;
+} */
+
+.displayedRetrievedTimer {
+  background-color: white;
+  width: 80%;
+  margin-top: 15px;
+  /* border-radius: 6px; */
+  /* border: 3px solid #32b2cc; */
+  border-top: 3px dashed #32b2cc;
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.saved-watch-title {
+  min-width: 250px;
+  align-self: center;
+  font-size: 21px;
+}
+
+.saved-watch-time {
+  align-self: center;
+  font-size: 21px;
+}
+
+.add-a-timer-button {
+  border: 3px solid #b2cc32;
+  font-size: 18px;
+  border-radius: 6px;
+  margin: 10px;
+  color: black;
+  background-color: white;
+  font-weight: bold;
+}
+
+.add-a-timer {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.add-a-timer-button:hover {
+  background: #e6f2c5;
+}
+
+.add-a-timer-input {
+  height: 30px;
+  font-size: 22px;
+  border-radius: 6px;
+  border: 2px solid black;
+}
+
+.saved-timers-title {
+  font-size: 40px;
 }

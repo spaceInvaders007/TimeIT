@@ -45,7 +45,7 @@ app.get("/timers", async (req, res) => {
   });
 });
 
-app.post("/timers", (req, res) => {
+app.post("/timers", async (req, res) => {
   //console.log(req.body, 'this is the log from the server post function')
   db.insertOne(req.body);
 
@@ -72,12 +72,14 @@ app.delete("/timers/:id", async (req, res) => {
   });
 });
 
-app.put("timers/:id", async (req, res) => {
-  db.updateOne(req.params.id, (err, timer) => {
+app.put("/timers/:id", async (req, res) => {
+  console.log(req.body);
+  console.log("it reached update function on server");
+  db.updateOne(req.body, (err, timer) => {
     if (timer) {
       res.status(200).json(timer);
     } else {
       res.sendStatus(404);
     }
-  })
-})
+  });
+});

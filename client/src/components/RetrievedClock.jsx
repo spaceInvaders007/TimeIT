@@ -7,40 +7,72 @@ class RetrievedClock extends React.Component {
     this.state = {
       status: false,
       retrievedTimers: this.props.retrievedTimers,
-      title: this.props.retrievedTimers[this.props.retrievedTimers.length -1].title,
-      hours: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].hours),
-      minutes: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].minutes),
-      seconds: Number(this.props.retrievedTimers[this.props.retrievedTimers.length -1].seconds)
+      title: this.props.retrievedTimers[this.props.retrievedTimers.length - 1]
+        .title,
+      hours: Number(
+        this.props.retrievedTimers[this.props.retrievedTimers.length - 1].hours
+      ),
+      minutes: Number(
+        this.props.retrievedTimers[this.props.retrievedTimers.length - 1]
+          .minutes
+      ),
+      seconds: Number(
+        this.props.retrievedTimers[this.props.retrievedTimers.length - 1]
+          .seconds
+      ),
+      id: Number(
+        this.props.retrievedTimers[this.props.retrievedTimers.length - 1].id
+      )
     };
+    this.handleRemove = this.handleRemove.bind(this);
     //this.retrieveTimer = this.retrieveTimer.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleUpdate = async e => {
-    e.preventDefault();
-    const response = await fetch("/timers", {
-      method: "UPDATE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title: this.state.timerName,
-        hours: ("0" + this.state.hours).slice(-2),
-        minutes: ("0" + this.state.minutes).slice(-2),
-        seconds: ("0" + this.state.seconds).slice(-2)
-      })
-    });
+  // async handleDelete(id) {
+  //   try {
+  //     await fetch("/timers/" + id, {
+  //       method: "DELETE",
+  //       body: JSON.stringify({ id })
+  //     });
+  //   } catch (err) {
+  //     console.log(err, "Couldn't delete one timer");
+  //   }
+  // }
+
+  async handleUpdate(id) {
+    try {
+      console.log("handleupdate is being clicked");
+      await fetch("/timers/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: this.state.timerName,
+          hours: ("0" + this.state.hours).slice(-2),
+          minutes: ("0" + this.state.minutes).slice(-2),
+          seconds: ("0" + this.state.seconds).slice(-2),
+          id
+        })
+      });
+    } catch (err) {
+      console.log(err, "Couldn't update one timer");
+    }
+
+    // e.preventDefault();
 
     // const body = await response.text();
     // console.log(body);
-  };
-
+  }
 
   handleClick = () => {
     this.setState(state => {
       if (state.status) {
         clearInterval(this.timer);
       } else {
-        this.setState({ seconds: this.state.seconds + 1 });
+        //React really doesn't like this
+        // this.setState({ seconds: this.state.seconds + 1 });
         this.timer = setInterval(() => {
           this.setState({ seconds: this.state.seconds + 1 });
           if (this.state.seconds === 60) {
@@ -64,7 +96,7 @@ class RetrievedClock extends React.Component {
     this.setState({
       display: "none"
     });
-    this.props.removeRetrievedClock(this.state.title)
+    this.props.removeRetrievedClock(this.state.title);
   };
   //this functions works perfectly for retrieving one timer by id
   // async retrieveTimer() {
@@ -78,25 +110,39 @@ class RetrievedClock extends React.Component {
   // }
 
   render() {
-    const {title, hours, minutes, seconds} = this.state;
+    const { title, hours, minutes, seconds } = this.state;
     const { status } = this.state;
     return (
       <div className="retrieved-clock">
-      <StopWatch style={{ display: this.state.display}}>
-      <TimerName>{`${title}`}</TimerName>
+        <StopWatch style={{ display: this.state.display }}>
+          <TimerName>{`${title}`}</TimerName>
           <Hours>{`${hours} :`}</Hours>
           <Minutes>{`${minutes} :`}</Minutes>
           <Seconds>{`${seconds}`}</Seconds>
-   <button onClick={this.handleClick}>
+          <button
+            onClick={() => {
+              this.handleClick();
+            }}
+          >
             {status ? "Pause" : "Start"}
           </button>
-          <button onClick={this.handleReset}>Reset</button>
-          <button onClick={this.handleRemove.bind(this)}>Remove</button>
-          <button onClick={this.handleUpdate.bind(this)}>Save</button>
-    </StopWatch>
-    </div>
-       
-    )
+          <button
+            onClick={() => {
+              this.handleRemove();
+            }}
+          >
+            Remove
+          </button>
+          <button
+            onClick={() => {
+              this.handleUpdate(this.state.id);
+            }}
+          >
+            Update
+          </button>
+        </StopWatch>
+      </div>
+    );
   }
 }
 
@@ -117,6 +163,5 @@ const Seconds = styled.div`
 const TimerName = styled.div``;
 
 const StopWatch = styled.div`
- display: flex;
-
+  display: flex;
 `;

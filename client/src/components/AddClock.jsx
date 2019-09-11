@@ -19,10 +19,17 @@ class AddClock extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="add-a-timer">
         <form onSubmit={this.addClock.bind(this)}>
-          <input onChange={this.handleChange.bind(this)} />
-          <input type="submit" value="Add a Timer" />
+          <input
+            className="add-a-timer-input"
+            onChange={this.handleChange.bind(this)}
+          />
+          <input
+            className="add-a-timer-button"
+            type="submit"
+            value="Add a Timer"
+          />
         </form>
 
         {/* <button onClick={this.removeHandler}>Remove</button> */}
